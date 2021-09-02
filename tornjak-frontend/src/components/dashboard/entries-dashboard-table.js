@@ -9,7 +9,7 @@ const columns = [
   { field: "id", headerName: "ID", width: 200, renderCell: renderCellExpand},
   { field: "spiffeid", headerName: "Name", width: 300, renderCell: renderCellExpand},
   { field: "parentId", headerName: "Parent ID", width: 250, renderCell: renderCellExpand},
-  { field: "adminFlag", headerName: "Admin Flag", width: 150},
+  { field: "adminFlag", headerName: "Admin Flag", width: 150,  type: 'boolean'},
   { field: "entryExpireTime", headerName: "Entry Expire Time", width: 190},
   { field: "platformType", headerName: "Platform Type", width: 170},
   { field: "clusterName", headerName: "Cluster Name", width: 190}
