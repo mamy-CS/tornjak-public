@@ -47,8 +47,8 @@ export interface ClustersListType {
 }
 
 export interface ClustersReducerStateType {
-    globalClustersList: ClustersListType[],
-    globalClusterTypeInfo: String[],
+    globalClustersList: ClustersListType[] | undefined,
+    globalClusterTypeInfo: string[],
 }
 
 export interface ClustersListUpdateAction extends Action<typeof GLOBAL_CLUSTERS_LIST>{

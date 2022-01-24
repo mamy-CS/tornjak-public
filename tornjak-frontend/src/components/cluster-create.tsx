@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import axios from 'axios';
-import { Dropdown, TextInput, MultiSelect, TextArea } from 'carbon-components-react';
+import { Dropdown, TextInput, FilterableMultiSelect, TextArea } from 'carbon-components-react';
 import GetApiServerUri from './helpers';
 import IsManager from './is_manager';
 import TornjakApi from './tornjak-api-helpers';
@@ -16,9 +16,40 @@ import {
   tornjakServerInfoUpdateFunc,
   serverInfoUpdateFunc
 } from 'redux/actions';
+import { RootState } from 'redux/reducers';
 
-class ClusterCreate extends Component {
-  constructor(props) {
+type ClusterCreateProp = {
+  agentsList: { label: string; }[],
+  clusterTypeList: string[],
+  clusterTypeInfoFunc: Function,
+  globalServerSelected: string,
+  globalErrorMessage: string,
+  agentsListUpdateFunc: Function,
+  tornjakMessageFunc: Function,
+  tornjakServerInfoUpdateFunc: Function,
+  globalTornjakServerInfo: Object,
+  serverInfoUpdateFunc: Function,
+}
+
+type ClusterCreateState = {
+  clusterName: string,
+  clusterType: string,
+  clusterDomainName: string,
+  clusterManagedBy: string,
+  clusterAgentsList: string[],
+  clusterTypeList: string[],
+  clusterTypeManualEntryOption: string,
+  clusterTypeManualEntry: boolean,
+  message: string,
+  statusOK: string,
+  selectedServer: string,
+  agentsListDisplay: string,
+  assignedAgentsListDisplay: string,
+}
+
+class ClusterCreate extends Component<ClusterCreateProp, ClusterCreateState> {
+  TornjakApi: TornjakApi;
+  constructor(props: ClusterCreateProp) {
     super(props);
     this.TornjakApi = new TornjakApi();
     this.onChangeClusterName = this.onChangeClusterName.bind(this);
@@ -34,7 +65,7 @@ class ClusterCreate extends Component {
       clusterType: "",
       clusterDomainName: "",
       clusterManagedBy: "",
-      clusterAgentsList: "",
+      clusterAgentsList: [],
       clusterTypeList: this.props.clusterTypeList,
       clusterTypeManualEntryOption: "----Select this option and Enter Custom Cluster Type Below----",
       clusterTypeManualEntry: false,
@@ -61,7 +92,7 @@ class ClusterCreate extends Component {
     }
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps: ClusterCreateProp) {
     if (IsManager) {
       if (prevProps.globalServerSelected !== this.props.globalServerSelected) {
         this.setState({ selectedServer: this.props.globalServerSelected });
@@ -69,8 +100,11 @@ class ClusterCreate extends Component {
     }
   }
 
-  onChangeAgentsList = selected => {
-    var sid = selected.selectedItems, agents = "", agentsDisplay = "", assignedAgentsDisplay = "";
+  onChangeAgentsList = (selected: { selectedItems: {label: string}[]; } | undefined) => {
+    if (selected === undefined) {
+      return;
+    }
+    var sid = selected.selectedItems, agents = [], agentsDisplay = "", assignedAgentsDisplay = "";
     let localAgentsIdList = [];
     for (let i = 0; i < sid.length; i++) {
       localAgentsIdList[i] = sid[i].label;
@@ -88,7 +122,10 @@ class ClusterCreate extends Component {
     });
   }
 
-  onChangeClusterName(e) {
+  onChangeClusterName(e: { target: { value: string; }; } | undefined) {
+    if (e === undefined) {
+      return;
+    }
     var sid = e.target.value;
     this.setState({
       clusterName: sid
@@ -96,7 +133,10 @@ class ClusterCreate extends Component {
     return
   }
 
-  onChangeClusterType = selected => {
+  onChangeClusterType = (selected: { selectedItem: string}) => {
+    if (selected === undefined) {
+      return;
+    }
     var sid = selected.selectedItem;
     if (sid === this.state.clusterTypeManualEntryOption) {
       this.setState({
@@ -112,7 +152,10 @@ class ClusterCreate extends Component {
     return
   }
 
-  onChangeManualClusterType(e) {
+  onChangeManualClusterType(e: { target: { value: string; }; } | undefined) {
+    if (e === undefined) {
+      return;
+    }
     var sid = e.target.value;
     this.setState({
       clusterType: sid
@@ -120,7 +163,10 @@ class ClusterCreate extends Component {
     return
   }
 
-  onChangeClusterDomainName(e) {
+  onChangeClusterDomainName(e: { target: { value: string; }; } | undefined) {
+    if (e === undefined) {
+      return;
+    }
     var sid = e.target.value;
     this.setState({
       clusterDomainName: sid
@@ -128,7 +174,10 @@ class ClusterCreate extends Component {
     return
   }
 
-  onChangeClusterManagedBy(e) {
+  onChangeClusterManagedBy(e: { target: { value: string; }; } | undefined) {
+    if (e === undefined) {
+      return;
+    }
     var sid = e.target.value;
     this.setState({
       clusterManagedBy: sid
@@ -147,10 +196,11 @@ class ClusterCreate extends Component {
     }
   }
 
-  onSubmit(e) {
-    var agentsList = [];
-    e.preventDefault();
-
+  onSubmit(e: { preventDefault: () => void; } | undefined) {
+    var agentsList: string[] = [];
+    if (e !== undefined) {
+      e.preventDefault();
+    }
     if (this.state.clusterName.length === 0) {
       this.setState({ message: "ERROR: Cluster Name Can Not Be Empty - Enter Cluster Name" });
       return
@@ -161,7 +211,7 @@ class ClusterCreate extends Component {
       return
     }
 
-    if (this.state.clusterAgentsList !== "") {
+    if (this.state.clusterAgentsList !== []) {
       agentsList = this.state.clusterAgentsList;
     }
 
@@ -197,15 +247,18 @@ class ClusterCreate extends Component {
     const ClusterType = this.props.clusterTypeList;
     return (
       <div>
-        <div className="cluster-create">
-          <div className="create-create-title">
+        <div className="cluster-create" data-test="cluster-create">
+          <div className="create-create-title" data-test="create-title">
             <h3>Create Cluster</h3>
           </div>
-          <form onSubmit={this.onSubmit}>
+          <form onSubmit={this.onSubmit} data-test="create-cluster-form">
             <br /><br />
             <div className="entry-form">
-              <div className="clustername-input-field">
+              <div 
+                className="clustername-input-field"
+                data-test="clustername-input-field">
                 <TextInput
+                  data-test="clustername-Text-input-field"
                   aria-required="true"
                   helperText="i.e. exampleabc"
                   id="clusterNameInputField"
@@ -215,7 +268,9 @@ class ClusterCreate extends Component {
                   onChange={this.onChangeClusterName}
                   required />
               </div>
-              <div className="clustertype-drop-down">
+              <div 
+                className="clustertype-drop-down"
+                data-test="clustertype-drop-down">
                 <Dropdown
                   aria-required="true"
                   ariaLabel="clustertype-drop-down"
@@ -224,7 +279,8 @@ class ClusterCreate extends Component {
                   label="Select Cluster Type"
                   titleText="Cluster Type [*required]"
                   onChange={this.onChangeClusterType}
-                  required />
+                  //required 
+                />
                 <p className="cluster-helper">i.e. Kubernetes, VMs...</p>
               </div>
               {this.state.clusterTypeManualEntry === true &&
@@ -240,7 +296,10 @@ class ClusterCreate extends Component {
                     }}
                   />
                 </div>}
-              <div className="cluster-domain-name-input-field">
+              <div 
+                className="cluster-domain-name-input-field"
+                data-test="cluster-domain-name-input-field"
+              >
                 <TextInput
                   helperText="i.e. example.org"
                   id="clusterDomainNameInputField"
@@ -252,6 +311,7 @@ class ClusterCreate extends Component {
               </div>
               <div className="cluster-managed-by-input-field">
                 <TextInput
+                  data-test="cluster-domain-name-input-text-field"
                   helperText="i.e. person-A"
                   id="clusterNameInputField"
                   invalidText="A valid value is required - refer to helper text below"
@@ -260,19 +320,19 @@ class ClusterCreate extends Component {
                   onChange={this.onChangeClusterManagedBy}
                 />
               </div>
-              <div className="agents-multiselect">
-                <MultiSelect.Filterable
+              <div className="agents-multiselect" data-test="agents-multiselect">
+                <FilterableMultiSelect
                   titleText="Assign Agents To Cluster"
                   helperText="i.e. spiffe://example.org/agent/myagent1..."
                   placeholder={this.state.agentsListDisplay}
-                  ariaLabel="selectors-multiselect"
+                  //ariaLabel="selectors-multiselect"
                   id="selectors-multiselect"
                   items={this.props.agentsList}
                   label={this.state.agentsListDisplay}
                   onChange={this.onChangeAgentsList}
                 />
               </div>
-              <div className="selectors-textArea">
+              <div className="selectors-textArea" data-test="selectors-textArea">
                 <TextArea
                   cols={50}
                   helperText="i.e. spiffe://example.org/agent/myagent1..."
@@ -285,10 +345,10 @@ class ClusterCreate extends Component {
                   disabled
                 />
               </div>
-              <div className="form-group">
+              <div className="form-group" data-test="create-cluster-button">
                 <input type="submit" value="Create Cluster" className="btn btn-primary" />
               </div>
-              <div>
+              <div data-test="success-message">
                 {this.state.statusOK === "OK" &&
                   <p className="success-message">--CLUSTER SUCCESSFULLY CREATED--</p>
                 }
@@ -296,7 +356,7 @@ class ClusterCreate extends Component {
                   <p className="failed-message">--CLUSTER CREATION FAILED--</p>
                 }
               </div>
-              <div className="alert-primary" role="alert">
+              <div className="alert-primary" data-test="alert-primary" role="alert">
                 <pre>
                   {this.state.message}
                 </pre>
@@ -309,8 +369,33 @@ class ClusterCreate extends Component {
   }
 }
 
+// Note: Needed for UI testing - will be removed after
+// ClusterCreate.propTypes = {
+//   clusterTypeList: PropTypes.array,
+//   agentsList: PropTypes.array,
+//   // globalAgentsList: PropTypes.array,
+//   agentsListUpdateFunc: PropTypes.func,
+//   clusterTypeInfoFunc: PropTypes.func,
+//   // globalAgentsWorkLoadAttestorInfo: PropTypes.array,
+//   // globalClusterTypeInfo: PropTypes.array,
+//   globalErrorMessage: PropTypes.string,
+//   // globalSelectorInfo: PropTypes.object,
+//   // globalServerInfo: PropTypes.object,
+//   globalServerSelected: PropTypes.string,
+//   globalTornjakServerInfo: PropTypes.object,
+//   // globalWorkloadSelectorInfo: PropTypes.object,
+//   // selectorInfoFunc: PropTypes.func,
+//   serverInfoUpdateFunc: PropTypes.func,
+//   // serverSelectedFunc: PropTypes.func,
+//   tornjakMessageFunc: PropTypes.func,
+//   tornjakServerInfoUpdateFunc: PropTypes.func,
+//   // agentsList: PropTypes.arrayOf(PropTypes.shape({
+//   //   key1: PropTypes.string,
+//   //   key2: PropTypes.object
+//   // })),
+// };
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state: RootState) => ({
   globalClusterTypeInfo: state.clusters.globalClusterTypeInfo,
   globalServerSelected: state.servers.globalServerSelected,
   globalSelectorInfo: state.servers.globalSelectorInfo,
@@ -326,3 +411,5 @@ export default connect(
   mapStateToProps,
   { clusterTypeInfoFunc, serverSelectedFunc, selectorInfoFunc, agentsListUpdateFunc, tornjakMessageFunc, tornjakServerInfoUpdateFunc, serverInfoUpdateFunc }
 )(ClusterCreate)
+
+export { ClusterCreate };
