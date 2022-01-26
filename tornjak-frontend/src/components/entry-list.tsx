@@ -15,10 +15,9 @@ import {
 } from 'redux/actions/types'
 
 type EntryListProp = {
-  serverSelectedFunc: Function,
-  entriesListUpdateFunc: Function,
-  tornjakMessageFunc: Function,
-  deleteEntry: Function,
+  serverSelectedFunc: (globalServerSelected: string) => void,
+  entriesListUpdateFunc: (globalEntriesList: EntriesListType[]) => void,
+  tornjakMessageFunc: (globalErrorMessage: string) => void,
   globalErrorMessage: string,
   globalServerSelected: string,
   globalEntriesList: EntriesListType[] | undefined,

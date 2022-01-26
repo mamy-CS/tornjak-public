@@ -28,14 +28,14 @@ import { RootState } from 'redux/reducers';
 // import PropTypes from "prop-types";
 
 type CreateEntryProp = {
-  serverSelectedFunc: Function,
-  agentsListUpdateFunc: Function,
-  tornjakServerInfoUpdateFunc: Function,
-  serverInfoUpdateFunc: Function,
-  entriesListUpdateFunc: Function,
-  selectorInfoFunc: Function,
-  tornjakMessageFunc: Function,
-  agentworkloadSelectorInfoFunc: Function,
+  serverSelectedFunc: (globalServerSelected: string) => void,
+  agentsListUpdateFunc: (globalAgentsList: AgentsListType[]) => void,
+  tornjakServerInfoUpdateFunc: (globalTornjakServerInfo: Object) => void,
+  serverInfoUpdateFunc: (globalServerInfo: ServerInfoType) => void,
+  entriesListUpdateFunc: (globalEntriesList: EntriesListType[]) => void,
+  selectorInfoFunc: (globalSelectorInfo: typeof selectors) => void,
+  tornjakMessageFunc: (globalErrorMessage: string) => void,
+  agentworkloadSelectorInfoFunc: (globalAgentsWorkLoadAttestorInfo: AgentsWorkLoadAttestorInfoType[]) => void,
   globalServerSelected: string,
   globalErrorMessage: string,
   globalTornjakServerInfo: Object,
