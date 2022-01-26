@@ -24,11 +24,11 @@ import {
 } from 'redux/actions/types'
 
 type ClusterEditProp = {
+  clustersListUpdateFunc: (globalClustersList: ClustersListType[]) => void,
+  tornjakMessageFunc: (globalErrorMessage: string) => void,
   clusterTypeList: string[],
   globalServerSelected: string,
   globalErrorMessage: string,
-  clustersListUpdateFunc: Function,
-  tornjakMessageFunc: Function,
   globalClustersList: ClustersListType[] | undefined,
   globalAgentsList: AgentsListType[] | undefined,
   globalServerInfo: ServerInfoType,

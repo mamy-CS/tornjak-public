@@ -17,18 +17,19 @@ import {
   serverInfoUpdateFunc
 } from 'redux/actions';
 import { RootState } from 'redux/reducers';
+import { AgentsListType, ServerInfoType } from 'redux/actions/types';
 
 type ClusterCreateProp = {
+  serverInfoUpdateFunc: (globalServerInfo: ServerInfoType) => void,
+  agentsListUpdateFunc: (globalAgentsList: AgentsListType[]) => void,
+  tornjakMessageFunc: (globalErrorMessage: string) => void,
+  tornjakServerInfoUpdateFunc: (globalTornjakServerInfo: Object) => void,
+  clusterTypeInfoFunc: (globalClusterTypeInfo: string[]) => void,
   agentsList: { label: string; }[],
   clusterTypeList: string[],
-  clusterTypeInfoFunc: Function,
   globalServerSelected: string,
   globalErrorMessage: string,
-  agentsListUpdateFunc: Function,
-  tornjakMessageFunc: Function,
-  tornjakServerInfoUpdateFunc: Function,
   globalTornjakServerInfo: Object,
-  serverInfoUpdateFunc: Function,
 }
 
 type ClusterCreateState = {
