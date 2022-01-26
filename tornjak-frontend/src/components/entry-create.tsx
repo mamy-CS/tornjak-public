@@ -71,7 +71,7 @@ type CreateEntryState = {
   spiffeIdPrefix: string,
   parentIdManualEntryOption: string,
   parentIDManualEntry: boolean,
-  selectorsList: Array<Object>,
+  selectorsList: { label: string; }[],
   selectorsListDisplay: string,
 }
 
@@ -206,7 +206,8 @@ class CreateEntry extends Component<CreateEntryProp, CreateEntryState> {
     localAgentsIdList[1] = prefix + this.props.globalServerInfo.data.trustDomain + "/spire/server";
 
     //agents
-    let agentEntriesDict:any = this.SpiffeHelper.getAgentsEntries(this.props.globalAgentsList, this.props.globalEntriesList)
+    let agentEntriesDict: any = this.SpiffeHelper.getAgentsEntries(this.props.globalAgentsList, this.props.globalEntriesList) //remove any after adding types to helpers
+    //let agentEntriesDict: {[key: string]: []} | undefined = this.SpiffeHelper.getAgentsEntries(this.props.globalAgentsList, this.props.globalEntriesList)
     idx = 2
     if(this.props.globalAgentsList === undefined) {
       return
@@ -328,21 +329,32 @@ class CreateEntry extends Component<CreateEntryProp, CreateEntryState> {
     });
   }
 
-  onChangeDnsNames(e: any) {
+  onChangeDnsNames(e: { target: { value: string; }; } | undefined) {
+    if (e === undefined) {
+      return;
+    }
+
     var sid = e.target.value;
     this.setState({
       dnsNames: sid,
     });
   }
 
-  onChangeFederatesWith(e: any) {
+  onChangeFederatesWith(e: { target: { value: string; }; } | undefined) {
+    if (e === undefined) {
+      return;
+    }
+
     var sid = e.target.value;
     this.setState({
       federatesWith: sid,
     });
   }
 
-  onChangeSelectorsRecommended = (selected: { selectedItems: any; }) => {
+  onChangeSelectorsRecommended = (selected: { selectedItems: {label: string}[]; } | undefined) => {
+    if (selected === undefined) {
+      return;
+    }
     var sid = selected.selectedItems, selectors = "", selectorsDisplay = "";
     for (let i = 0; i < sid.length; i++) {
       if (i !== sid.length - 1) {
