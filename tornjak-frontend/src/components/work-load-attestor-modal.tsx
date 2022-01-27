@@ -7,9 +7,30 @@ import {
     agentsListUpdateFunc,
     agentworkloadSelectorInfoFunc,
 } from 'redux/actions';
+import { RootState } from 'redux/reducers';
+import { AgentsListType, AgentsWorkLoadAttestorInfoType } from "redux/actions/types";
+// import PropTypes from "prop-types";
 
-class WorkLoadAttestor extends React.Component {
-    constructor(props) {
+type WorkLoadAttestorProp = {
+    spiffeid: any,
+    globalServerSelected: string,
+    globalAgentsList: AgentsListType[] | undefined,
+    globalWorkloadSelectorInfo: {[key:string]: {label: string}[]},
+    agentsListUpdateFunc: (globalAgentsList: AgentsListType[]) => void,
+    agentworkloadSelectorInfoFunc: (globalAgentsWorkLoadAttestorInfo: AgentsWorkLoadAttestorInfoType[]) => void,
+}
+
+type WorkLoadAttestorState = {
+    workloadPlugin: string,
+    selectorsList: string,
+    selectors: string,
+    wLoadAttdata: [{}],
+    agentId: string,
+    agentSpiffeId: string,
+}
+class WorkLoadAttestor extends React.Component<WorkLoadAttestorProp, WorkLoadAttestorState> {
+    TornjakApi: TornjakApi;
+    constructor(props:WorkLoadAttestorProp) {
         super(props);
         this.TornjakApi = new TornjakApi();
         this.state = {
@@ -34,7 +55,7 @@ class WorkLoadAttestor extends React.Component {
         //     this.TornjakApi.refreshLocalSelectorsState(this.props.agentworkloadSelectorInfoFunc, this.props.globalServerSelected);
         // }
     }
-    componentDidUpdate(prevProps, prevState) {
+    componentDidUpdate(prevProps:WorkLoadAttestorProp) {
         if(prevProps !== this.props) {
             this.prepareAgentData();
         }
@@ -57,15 +78,15 @@ class WorkLoadAttestor extends React.Component {
             this.TornjakApi.refreshSelectorsState(this.props.globalServerSelected, this.props.agentworkloadSelectorInfoFunc);
         } else {
             this.TornjakApi.registerLocalSelectors(wLoadAttdata, this.TornjakApi.refreshLocalSelectorsState, this.props.agentworkloadSelectorInfoFunc);
-            this.TornjakApi.refreshLocalSelectorsState(this.props.agentworkloadSelectorInfoFunc, this.props.globalServerSelected);
+            this.TornjakApi.refreshLocalSelectorsState(this.props.agentworkloadSelectorInfoFunc);
         }
         return true;
     };
 
-    onChangeWorkloadPlugin = selected => {
+    onChangeWorkloadPlugin = (selected: { selectedItem: { label: string; }; }) => {
         var selectors = "";
         var sid = selected.selectedItem.label;
-        var selectorsObject = this.props.globalWorkloadSelectorInfo[sid];
+        var selectorsObject: { label: string; }[] = this.props.globalWorkloadSelectorInfo[sid];
         for (let i = 0; i < selectorsObject.length; i++) {
             if (i !== sid.length - 1) {
                 selectors = selectors + selectorsObject[i].label + ":\n";
@@ -137,7 +158,16 @@ class WorkLoadAttestor extends React.Component {
     }
 }
 
-const mapStateToProps = (state) => ({
+// Note: Needed for UI testing - will be removed after
+// WorkLoadAttestor.propTypes = {
+//     globalServerSelected: PropTypes.string,
+//     globalAgentsList: PropTypes.array,
+//     globalWorkloadSelectorInfo: PropTypes.object,
+//     agentsListUpdateFunc: PropTypes.func,
+//     agentworkloadSelectorInfoFunc: PropTypes.func,
+//   };
+
+const mapStateToProps = (state:RootState) => ({
     globalServerSelected: state.servers.globalServerSelected,
     globalAgentsList: state.agents.globalAgentsList,
     globalWorkloadSelectorInfo: state.servers.globalWorkloadSelectorInfo,
@@ -147,3 +177,5 @@ export default connect(
     mapStateToProps,
     { agentsListUpdateFunc, agentworkloadSelectorInfoFunc }
 )(WorkLoadAttestor)
+
+export { WorkLoadAttestor };

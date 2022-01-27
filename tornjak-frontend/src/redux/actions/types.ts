@@ -94,6 +94,7 @@ export const GLOBAL_WORKLOAD_SELECTOR_INFO = 'GLOBAL_WORKLOAD_SELECTOR_INFO';
 //     verboseConfig: string;
 // }
 
+
 export interface ServerInfoType {
     data: {
         trustDomain: string;
