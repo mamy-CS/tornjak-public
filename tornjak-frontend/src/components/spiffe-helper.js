@@ -1,6 +1,12 @@
 import { Component } from 'react';
 
 class SpiffeHelper extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+    };
+  }
+  
   getMillisecondsFromEpoch() {
     return new Date().getTime()
   }
