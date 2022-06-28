@@ -4,10 +4,22 @@
   background-color: black;
   min-width: 1300px;
   width: 100%;
+  height: 48px;
 }
 
 .logo {
   margin-top: -50px;
+}
+
+.bar-next-to-logo {
+  display: inline-block;
+  color: white;
+  position: absolute;
+  margin-top: 5px;
+}
+.header-toolbar {
+  display: inline;
+  float: right;
 }
 
 .dropdown-container {

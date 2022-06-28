@@ -8,6 +8,10 @@ import {
   clickedDashboardTableFunc,
 } from 'redux/actions';
 import { RootState } from 'redux/reducers';
+import {
+  HeaderGlobalAction,
+} from "carbon-components-react/lib/components/UIShell";
+import { UserAvatar20, Notification20, Search20 } from "@carbon/icons-react";
 
 type NavigationBarProp = {
   // dispatches a payload for the clicked table in a dashboard as a string and has a return type of void
@@ -16,9 +20,7 @@ type NavigationBarProp = {
   globalClickedDashboardTable: string,
 }
 
-type NavigationBarState = {
-
-}
+type NavigationBarState = {}
 
 
 class NavigationBar extends Component<NavigationBarProp, NavigationBarState> {
@@ -72,6 +74,17 @@ class NavigationBar extends Component<NavigationBarProp, NavigationBarState> {
                 }}
               >Tornjak Dashboard</a>
             </div>
+            <div className='header-toolbar'>
+              <HeaderGlobalAction aria-label="Search" onClick={() => { }}>
+                <Search20 />
+              </HeaderGlobalAction>
+              <HeaderGlobalAction aria-label="Notifications" onClick={() => { }}>
+                <Notification20 />
+              </HeaderGlobalAction>
+              <HeaderGlobalAction aria-label="User" onClick={() => { }}>
+                <UserAvatar20 />
+              </HeaderGlobalAction>
+            </div>
             {IsManager && managerNavs}
           </div>
         </div>
@@ -80,6 +93,9 @@ class NavigationBar extends Component<NavigationBarProp, NavigationBarState> {
             <a href="/">
               <img src={tornjak_logo} height="50" width="160" alt="Tornjak" /></a>
           </span>
+          <div className='bar-next-to-logo'>
+            <h3>|</h3>
+          </div>
         </div>
       </div>
     );
