@@ -136,6 +136,33 @@ class TornjakApi extends Component<TornjakApiProp, TornjakApiState> {
       })
   }
 
+  // refreshServerState returns the list of tornjak agents/ servers
+  refreshServerState = (serversListUpdateFunc: {
+    (globalServersList: Array<string>): void;
+  }) => {
+    axios.get(GetApiServerUri("/manager-api/server/list"), { crossdomain: true })
+      .then(response => {
+        console.log(response.data);
+        serversListUpdateFunc(response.data["servers"]);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+  }
+
+  populateServers = (serversListUpdateFunc: {
+    (globalServersList: Array<string>): void;
+  }) => {
+    axios.get(GetApiServerUri("/manager-api/server/list"), { crossdomain: true })
+    //axios.get(GetApiServerUri("/manager-api/server/list"))
+        .then(response => {
+            serversListUpdateFunc(response.data["servers"]);
+        })
+        .catch((error) => {
+            console.log(error);
+        })
+}
+
   // populateTornjakAgentInfo returns tornjak info of requested agents including cluster name and selector
   populateTornjakAgentInfo = (serverName: string,
     agentworkloadSelectorInfoFunc: (globalAgentsWorkLoadAttestorInfo: AgentsWorkLoadAttestorInfo[]) => void,

@@ -51,7 +51,7 @@ class TableToolBar extends React.Component<TableToolBarProp, TableToolBarState> 
                     <TableToolbarSearch onChange={(e) => this.props.onInputChange(e)} />
                 </TableToolbarContent>
                 <TableBatchActions {...this.props.getBatchActionProps()}>
-                    {this.props.deleteEntity !== undefined && this.TornjakHelper.checkRolesAdminUser(this.props.globalUserRoles) &&
+                    {this.props.deleteEntity !== undefined && this.TornjakHelper.checkUserRole(this.props.globalUserRoles, "admin") &&
                         <TableBatchAction
                             renderIcon={IoTrashOutline}
                             iconDescription="Delete"
@@ -76,7 +76,7 @@ class TableToolBar extends React.Component<TableToolBarProp, TableToolBarState> 
                             Export to Json
                         </TableBatchAction>
                     }
-                    {this.props.banEntity !== undefined && this.TornjakHelper.checkRolesAdminUser(this.props.globalUserRoles) &&
+                    {this.props.banEntity !== undefined && this.TornjakHelper.checkUserRole(this.props.globalUserRoles, "admin") &&
                         <TableBatchAction
                             renderIcon={IoBan}
                             iconDescription="Ban"

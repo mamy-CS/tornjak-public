@@ -17,9 +17,12 @@ import TornjakServerInfo from "./components/tornjak-server-info";
 import TornjakDashBoard from "./components/dashboard/tornjak-dashboard";
 import DashboardDetailsRender from 'components/dashboard/dashboard-details-render';
 import RenderOnAdminRole from 'components/RenderOnAdminRole'
+import KeycloakService from "auth/KeycloakAuth";
+import AccessNotAllowed from 'components/AccessNotAllowed';
 import './App.css';
 
 function App() {
+    const hasManagerRole = KeycloakService.hasRole(['manager']);
     return (
         <div>
             <Provider store={store}>
@@ -28,31 +31,37 @@ function App() {
                         <div className="nav-comp">
                             <NavigationBar />
                         </div>
-                        <div className="rest-body">
-                            <SelectServer />
-                            <br />
-                            {IsManager && <br />}
-                            <Route path="/" exact component={AgentList} />
-                            <Route path="/clusters" exact component={ClusterList} />
-                            <Route path="/agents" exact component={AgentList} />
-                            <Route path="/entries" exact component={EntryList} />
-                            <RenderOnAdminRole>
-                                <Route path="/entry/create" exact component={EntryCreate} />
-                                <Route path="/agent/createjointoken" exact component={CreateJoinToken} />
-                                <Route path="/cluster/clustermanagement" exact component={ClusterManagement} />
-                            </RenderOnAdminRole>
-                            <Route path="/tornjak/serverinfo" exact component={TornjakServerInfo} />
-                            <Route path="/tornjak/dashboard" exact component={TornjakDashBoard} />
-                            <Route
-                                path="/tornjak/dashboard/details/:entity"
-                                render={(props) => (<DashboardDetailsRender {...props} params={props.match.params} />)}
-                            />
-                            <Route path="/server/manage" exact component={ServerManagement} />
-                            <br /><br /><br />
-                            <svg className="endbanneroutput">
-                                <rect className="endbanneroutput"></rect>
-                            </svg>
-                        </div>
+                        {IsManager && !hasManagerRole ?
+                            <div className='maneger-access-not-allowed'>
+                                <AccessNotAllowed />
+                            </div>
+                            :
+                            <div className="rest-body">
+                                <SelectServer />
+                                <br />
+                                {IsManager && <br />}
+                                <Route path="/" exact component={AgentList} />
+                                <Route path="/clusters" exact component={ClusterList} />
+                                <Route path="/agents" exact component={AgentList} />
+                                <Route path="/entries" exact component={EntryList} />
+                                <RenderOnAdminRole>
+                                    <Route path="/entry/create" exact component={EntryCreate} />
+                                    <Route path="/agent/createjointoken" exact component={CreateJoinToken} />
+                                    <Route path="/cluster/clustermanagement" exact component={ClusterManagement} />
+                                </RenderOnAdminRole>
+                                <Route path="/tornjak/serverinfo" exact component={TornjakServerInfo} />
+                                <Route path="/tornjak/dashboard" exact component={TornjakDashBoard} />
+                                <Route
+                                    path="/tornjak/dashboard/details/:entity"
+                                    render={(props) => (<DashboardDetailsRender {...props} params={props.match.params} />)}
+                                />
+                                <Route path="/server/manage" exact component={ServerManagement} />
+                                <br /><br /><br />
+                                <svg className="endbanneroutput">
+                                    <rect className="endbanneroutput"></rect>
+                                </svg>
+                            </div>
+                        }
                     </div>
                 </Router>
             </Provider>

@@ -5,7 +5,7 @@ import {
     GLOBAL_AGENTS_LIST,
     GLOBAL_AGENTS_WORKLOADATTESTOR_INFO,
 } from '../actions/types';
-
+  
 const initialState: AgentsReducerState = {
     globalAgentsList: [],
     globalAgentsWorkLoadAttestorInfo: [],

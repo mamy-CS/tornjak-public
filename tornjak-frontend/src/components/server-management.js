@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import axios from 'axios'
 import GetApiServerUri from './helpers';
 import IsManager from './is_manager';
+import TornjakApi from './tornjak-api-helpers';
 import {
   serversListUpdateFunc
 } from 'redux/actions';
@@ -18,6 +19,7 @@ const Server = props => (
 class ServerManagement extends Component {
   constructor(props) {
     super(props);
+    this.TornjakApi = new TornjakApi(props);
     this.state = {
         formServerName: "",
         formServerAddress: "",
@@ -38,18 +40,7 @@ class ServerManagement extends Component {
   }
 
   componentDidMount() {
-      this.refreshServerState()
-  }
-
-  refreshServerState () {
-    axios.get(GetApiServerUri("/manager-api/server/list"), { crossdomain: true })
-      .then(response => {
-          console.log(response.data);
-          this.props.serversListUpdateFunc(response.data["servers"]);
-      })
-      .catch((error) => {
-        console.log(error);
-      })
+      this.TornjakApi.refreshServerState(this.props.serversListUpdateFunc)
   }
 
   serverList() {
@@ -127,7 +118,8 @@ class ServerManagement extends Component {
     axios.post(GetApiServerUri('/manager-api/server/register'), cjtData)
       .then(res => {
           this.setState({ message: "Requst:" + JSON.stringify(cjtData,null,  ' ')+ "\n\nSuccess:" + JSON.stringify(res.data, null, ' ')});
-          this.refreshServerState();
+          //this.refreshServerState();
+          this.TornjakApi.refreshServerState(this.props.serversListUpdateFunc)
       }
       )
       .catch(err => this.setState({ message: "ERROR:" + err + (typeof (err.response) !== "undefined" ? err.response.data : "")}))

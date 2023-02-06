@@ -41,6 +41,9 @@ const updateToken = (successCallback) =>
         .then(successCallback)
         .catch(doLogin);
 
+// roles
+const hasRole = (roles) => roles.some((role) => keycloak.hasResourceRole(role));
+
 const KeycloakService = {
     initKeycloak,
     getFirstName,
@@ -49,6 +52,7 @@ const KeycloakService = {
     doLogout,
     getToken,
     updateToken,
+    hasRole
 };
 
 export default KeycloakService;

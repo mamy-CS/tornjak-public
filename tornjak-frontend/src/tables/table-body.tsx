@@ -55,7 +55,7 @@ class Body extends React.Component<BodyProp, BodyState> {
                                     cell.value)}
                             </TableCell>
                         ))}
-                        {this.props.entityType === "Agent" && this.TornjakHelper.checkRolesAdminUser(this.props.globalUserRoles) &&
+                        {this.props.entityType === "Agent" && this.TornjakHelper.checkUserRole(this.props.globalUserRoles, "admin") &&
                             <TableCell>
                                 <div>
                                     <WorkLoadAttestor

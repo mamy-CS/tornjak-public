@@ -37,10 +37,10 @@ class RenderOnAdminRole extends Component<RenderOnAdminRoleProp, RenderOnAdminRo
     render() {
         return (
             <div>
-                {this.TornjakHelper.checkRolesAdminUser(this.props.globalUserRoles) &&
+                {this.TornjakHelper.checkUserRole(this.props.globalUserRoles, "admin") &&
                     this.props.children // if admin role return children
                 }
-                {!this.TornjakHelper.checkRolesAdminUser(this.props.globalUserRoles) && this.checkPath() &&
+                {!this.TornjakHelper.checkUserRole(this.props.globalUserRoles, "admin") && this.checkPath() &&
                     <AccessNotAllowed /> // if no admin role return access not allowed
                 }
             </div>

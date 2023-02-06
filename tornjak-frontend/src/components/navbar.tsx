@@ -66,7 +66,9 @@ class NavigationBar extends Component<NavigationBarProp, NavigationBarState> {
   }
 
   render() {
-    const isAdmin = this.TornjakHelper.checkRolesAdminUser(this.props.globalUserRoles), withAuth = process.env.REACT_APP_AUTH_SERVER_URI;
+    const isAdminRole = this.TornjakHelper.checkUserRole(this.props.globalUserRoles, "admin"),
+      withAuth = process.env.REACT_APP_AUTH_SERVER_URI;
+    console.log(isAdminRole)
     let managerNavs;
     console.log(process.env.REACT_APP_AUTH_SERVER_URI)
     managerNavs =
@@ -82,7 +84,7 @@ class NavigationBar extends Component<NavigationBarProp, NavigationBarState> {
               <a href="/clusters" className="dropbtn">Clusters </a>
               <div className="dropdown-content">
                 <a href="/clusters" className="nav-link">Clusters List</a>
-                {(isAdmin || (withAuth === undefined)) &&
+                {(isAdminRole || (withAuth === undefined)) &&
                   <a href="/cluster/clustermanagement" className="nav-link">Cluster Management</a>
                 }
               </div>
@@ -91,7 +93,7 @@ class NavigationBar extends Component<NavigationBarProp, NavigationBarState> {
               <a href="/agents" className="dropbtn">Agents </a>
               <div className="dropdown-content">
                 <a href="/agents" className="nav-link">Agents List</a>
-                {(isAdmin || (withAuth === undefined)) &&
+                {(isAdminRole || (withAuth === undefined)) &&
                   <a href="/agent/createjointoken" className="nav-link">Create Token</a>
                 }
               </div>
@@ -100,7 +102,7 @@ class NavigationBar extends Component<NavigationBarProp, NavigationBarState> {
               <a href="/entries" className="dropbtn">Entries</a>
               <div className="dropdown-content">
                 <a href="/entries" className="nav-link">Entries List</a>
-                {(isAdmin || (withAuth === undefined)) &&
+                {(isAdminRole || (withAuth === undefined)) &&
                   <a href="/entry/create" className="nav-link">Create Entries</a>
                 }
               </div>
@@ -120,9 +122,14 @@ class NavigationBar extends Component<NavigationBarProp, NavigationBarState> {
               >Tornjak Dashboard</a>
             </div>
             <HeaderToolBar />
-            {Auth_Server_Uri && isAdmin &&
+            {Auth_Server_Uri && isAdminRole && !IsManager &&
               <div className="admin-toolbar-header">
                 <h5>ADMIN PORTAL</h5>
+              </div>
+            }
+            {IsManager &&
+              <div className="admin-toolbar-header">
+                <h5>MANAGER PORTAL</h5>
               </div>
             }
             {IsManager && managerNavs}

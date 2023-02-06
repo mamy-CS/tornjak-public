@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import axios from 'axios';
-import GetApiServerUri from './helpers';
 import IsManager from './is_manager';
 import TornjakApi from './tornjak-api-helpers';
 
@@ -60,7 +58,7 @@ class SelectServer extends Component<SelectServerProp, SelectServerState> {
 
     componentDidMount() {
         if (IsManager) {
-            this.populateServers()
+            this.TornjakApi.populateServers(this.props.serversListUpdateFunc)
             if ((this.props.globalServerSelected !== "") && (this.props.globalErrorMessage === "OK" || this.props.globalErrorMessage === "")) {
                 this.TornjakApi.populateTornjakServerInfo(this.props.globalServerSelected, this.props.tornjakServerInfoUpdateFunc, this.props.tornjakMessageFunc);
             }
@@ -79,17 +77,6 @@ class SelectServer extends Component<SelectServerProp, SelectServerState> {
                 this.TornjakApi.populateAgentsUpdate(this.props.globalServerSelected, this.props.agentsListUpdateFunc, this.props.tornjakMessageFunc);
             }
         }
-    }
-
-    populateServers() {
-        //axios.get(GetApiServerUri("/manager-api/server/list"), { crossdomain: true })
-        axios.get(GetApiServerUri("/manager-api/server/list"))
-            .then(response => {
-                this.props.serversListUpdateFunc(response.data["servers"]);
-            })
-            .catch((error) => {
-                console.log(error);
-            })
     }
 
     serverDropdownList() {

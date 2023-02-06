@@ -4,6 +4,7 @@ import {
 } from "carbon-components-react/lib/components/UIShell";
 import { UserAvatar20, Notification20, Search20 } from "@carbon/icons-react";
 import KeycloakService from "auth/KeycloakAuth";
+import DownloadToken from "./download-token-modal"
 
 const Auth_Server_Uri = process.env.REACT_APP_AUTH_SERVER_URI;
 
@@ -28,13 +29,23 @@ class HeaderToolBar extends Component<HeaderToolBarProp, HeaderToolBarState> {
                         </HeaderGlobalAction>
                         <div className="user-dropdown-content">
                             {KeycloakService.isLoggedIn() && (
-                                // eslint-disable-next-line
-                                <a
-                                    href="#"
-                                    className="nav-link"
-                                    onClick={() => KeycloakService.doLogout()}>
-                                    Logout {KeycloakService.getFirstName()}
-                                </a>
+                                <div>
+                                    {/* eslint-disable-next-line */}
+                                    <DownloadToken />
+                                    {/* <a
+                                        href="#"
+                                        className="nav-link"
+                                        onClick={() => <DownloadToken />}>
+                                        Download Access Token
+                                    </a> */}
+                                    {/* eslint-disable-next-line */}
+                                    <a
+                                        href="#"
+                                        className="nav-link"
+                                        onClick={() => KeycloakService.doLogout()}>
+                                        Logout {KeycloakService.getFirstName()}
+                                    </a>
+                                </div>
                             )}
                         </div>
                     </div>
