@@ -14,8 +14,12 @@ import {
 import KeycloakService from "auth/KeycloakAuth";
 import { logError } from './helpers';
 import { displayResponseError } from './error-api';
-const Auth_Server_Uri = process.env.REACT_APP_AUTH_SERVER_URI;
+import store from '../redux/store';
 
+const state = store.getState();
+const envArguments = state.tornjak.globalEnvArguments;
+//const Auth_Server_Uri = process.env.REACT_APP_AUTH_SERVER_URI;
+const Auth_Server_Uri = envArguments.REACT_APP_AUTH_SERVER_URI;
 type TornjakApiProp = {}
 type TornjakApiState = {}
 

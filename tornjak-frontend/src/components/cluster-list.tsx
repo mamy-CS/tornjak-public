@@ -16,6 +16,7 @@ import {
 } from 'redux/actions';
 import { RootState } from 'redux/reducers';
 import { ClustersList, ServerInfo, TornjakServerInfo } from './types'
+import { DynamicConfig } from "../configuration/config";
 
 type ClusterListProp = {
   // dispatches a payload for list of clusters with their metadata info as an array of ClustersList Type and has a return type of void
@@ -32,6 +33,7 @@ type ClusterListProp = {
   globalTornjakServerInfo: TornjakServerInfo,
   // list of clusters with their metadata info as an array of ClustersList Type
   globalClustersList: ClustersList[],
+  globalEnvArguments: DynamicConfig,
 }
 
 type ClusterListState = {
@@ -136,6 +138,7 @@ const mapStateToProps = (state: RootState) => ({
   globalClustersList: state.clusters.globalClustersList,
   globalTornjakServerInfo: state.servers.globalTornjakServerInfo,
   globalErrorMessage: state.tornjak.globalErrorMessage,
+  globalEnvArguments: state.tornjak.globalEnvArguments
 })
 
 export default connect(

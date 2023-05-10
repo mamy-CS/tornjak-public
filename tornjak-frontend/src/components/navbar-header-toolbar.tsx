@@ -4,8 +4,13 @@ import {
 } from "carbon-components-react/lib/components/UIShell";
 import { UserAvatar20, Notification20, Search20 } from "@carbon/icons-react";
 import KeycloakService from "auth/KeycloakAuth";
+import store from '../redux/store';
 
-const Auth_Server_Uri = process.env.REACT_APP_AUTH_SERVER_URI;
+const state = store.getState();
+const envArguments = state.tornjak.globalEnvArguments;
+
+//const Auth_Server_Uri = process.env.REACT_APP_AUTH_SERVER_URI;
+const Auth_Server_Uri = envArguments.REACT_APP_AUTH_SERVER_URI;
 
 type HeaderToolBarProp = {}
 

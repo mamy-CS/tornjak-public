@@ -10,6 +10,10 @@ import {
     WorkloadSelectorInfoLabels
 } from "components/types";
 
+import {
+    DynamicConfig,
+} from 'configuration/config'
+
 // auth
 export const GLOBAL_IS_AUTHENTICATED = 'GLOBAL_IS_AUTHENTICATED';
 export const GLOBAL_ACCESS_TOKEN = 'GLOBAL_ACCESS_TOKEN';
@@ -150,9 +154,11 @@ export type ServersAction =
 // tornjak
 export const GLOBAL_MESSAGE = 'GLOBAL_MESSAGE';
 export const GLOBAL_CLICKED_DASHBOARD_TABLE = 'GLOBAL_CLICKED_DASHBOARD_TABLE';
+export const GLOBAL_ENV_ARGUMENTS = 'GLOBAL_ENV_ARGUMENTS';
 export interface TornjakReducerState {
     globalErrorMessage: string,
     globalClickedDashboardTable: string,
+    globalEnvArguments: DynamicConfig,
 }
 
 export interface TornjakMessageAction extends Action<typeof GLOBAL_MESSAGE> {
@@ -162,6 +168,11 @@ export interface ClickedDashboardTableAction extends Action<typeof GLOBAL_CLICKE
     payload: string;
 }
 
+export interface EnvArgumentsUpdateAction extends Action<typeof GLOBAL_ENV_ARGUMENTS> {
+    payload: DynamicConfig;
+}
+
 export type TornjakAction =
     TornjakMessageAction |
-    ClickedDashboardTableAction
+    ClickedDashboardTableAction |
+    EnvArgumentsUpdateAction

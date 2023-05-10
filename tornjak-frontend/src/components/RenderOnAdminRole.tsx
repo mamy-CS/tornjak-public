@@ -3,8 +3,14 @@ import TornjakHelper from './tornjak-helper';
 import AccessNotAllowed from './AccessNotAllowed'
 import { connect } from 'react-redux';
 import { RootState } from 'redux/reducers';
+import store from '../redux/store';
 
-const Auth_Server_Uri = process.env.REACT_APP_AUTH_SERVER_URI;
+const state = store.getState();
+const envArguments = state.tornjak.globalEnvArguments;
+
+
+//const Auth_Server_Uri = process.env.REACT_APP_AUTH_SERVER_URI;
+const Auth_Server_Uri = envArguments.REACT_APP_AUTH_SERVER_URI;
 
 type RenderOnAdminRoleProp = {
     // updated user roles

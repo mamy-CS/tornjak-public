@@ -13,13 +13,20 @@ import {
   isAuthenticatedUpdateFunc,
   accessTokenUpdateFunc,
   UserRolesUpdateFunc,
+  envArgumentsUpdateFunc
 } from 'redux/actions';
 import {
   AccessToken
 } from './types';
 import HeaderToolBar from './navbar-header-toolbar';
+import { DynamicConfig } from "../configuration/config";
+import store from '../redux/store';
 
-const Auth_Server_Uri = process.env.REACT_APP_AUTH_SERVER_URI;
+const state = store.getState();
+const envArguments = state.tornjak.globalEnvArguments;
+
+//const Auth_Server_Uri = process.env.REACT_APP_AUTH_SERVER_URI;
+const Auth_Server_Uri = envArguments.REACT_APP_AUTH_SERVER_URI;
 
 type NavigationBarProp = {
   // dispatches a payload if user is authenticated or not return type of void
@@ -38,19 +45,25 @@ type NavigationBarProp = {
   clickedDashboardTableFunc: (globalClickedDashboardTable: string) => void,
   // the clicked dashboard table
   globalClickedDashboardTable: string,
+  envArguments: DynamicConfig,
+  globalEnvArguments: DynamicConfig,
+  envArgumentsUpdateFunc: (globalEnvArguments: DynamicConfig) => void,
 }
 
-type NavigationBarState = {}
+type NavigationBarState = {
+}
 
 class NavigationBar extends Component<NavigationBarProp, NavigationBarState> {
   TornjakHelper: TornjakHelper;
   constructor(props: NavigationBarProp) {
     super(props);
     this.TornjakHelper = new TornjakHelper(props);
-    this.state = {};
+    this.state = {
+    };
   }
 
   componentDidMount() {
+    this.props.envArgumentsUpdateFunc(this.props.envArguments);
     if (Auth_Server_Uri) {
       this.props.isAuthenticatedUpdateFunc(KeycloakService.isLoggedIn());
       if (KeycloakService.isLoggedIn()) {
@@ -65,8 +78,14 @@ class NavigationBar extends Component<NavigationBarProp, NavigationBarState> {
     }
   }
 
+  componentDidUpdate(prevProps: Readonly<NavigationBarProp>, prevState: Readonly<NavigationBarState>, snapshot?: any): void {
+    if (prevProps.envArguments !== this.props.envArguments) {
+      this.props.envArgumentsUpdateFunc(this.props.envArguments);
+    }
+  
+  }
   render() {
-    const isAdmin = this.TornjakHelper.checkRolesAdminUser(this.props.globalUserRoles), withAuth = process.env.REACT_APP_AUTH_SERVER_URI;
+    const isAdmin = this.TornjakHelper.checkRolesAdminUser(this.props.globalUserRoles), withAuth = envArguments.REACT_APP_AUTH_SERVER_URI;
     let managerNavs;
     managerNavs =
       <div className="dropdown">
@@ -148,11 +167,12 @@ const mapStateToProps = (state: RootState) => ({
   globalIsAuthenticated: state.auth.globalIsAuthenticated,
   globalAccessToken: state.auth.globalAccessToken,
   globalUserRoles: state.auth.globalUserRoles,
+  globalEnvArguments: state.tornjak.globalEnvArguments
 })
 
 export default connect(
   mapStateToProps,
-  { clickedDashboardTableFunc, isAuthenticatedUpdateFunc, accessTokenUpdateFunc, UserRolesUpdateFunc }
+  { clickedDashboardTableFunc, isAuthenticatedUpdateFunc, accessTokenUpdateFunc, UserRolesUpdateFunc, envArgumentsUpdateFunc }
 )(NavigationBar)
 
 export { NavigationBar }

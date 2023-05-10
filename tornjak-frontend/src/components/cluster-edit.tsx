@@ -25,6 +25,7 @@ import {
   ServerInfo,
 } from './types'
 import { displayError, displayResponseError } from './error-api';
+import { DynamicConfig } from "../configuration/config";
 
 type ClusterEditProp = {
   // dispatches a payload for list of clusters with their metadata info as an array of ClustersList Type and has a return type of void
@@ -44,7 +45,8 @@ type ClusterEditProp = {
   // the server trust domain and nodeAttestorPlugin as a ServerInfoType
   globalServerInfo: ServerInfo,
   // list of agents' SPIFEE ID's as strings
-  agentsList: AgentLabels[]
+  agentsList: AgentLabels[],
+  globalEnvArguments: DynamicConfig,
 }
 
 type ClusterEditState = {
@@ -515,6 +517,7 @@ const mapStateToProps = (state: RootState) => ({
   globalErrorMessage: state.tornjak.globalErrorMessage,
   globalWorkloadSelectorInfo: state.servers.globalWorkloadSelectorInfo,
   globalAgentsWorkLoadAttestorInfo: state.agents.globalAgentsWorkLoadAttestorInfo,
+  globalEnvArguments: state.tornjak.globalEnvArguments
 })
 
 export default connect(

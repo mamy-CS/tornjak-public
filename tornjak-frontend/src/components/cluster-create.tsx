@@ -24,6 +24,7 @@ import {
   ServerInfo,
   TornjakServerInfo } from './types';
 import { displayError, displayResponseError } from './error-api';
+import { DynamicConfig } from "../configuration/config";
 
 type ClusterCreateProp = {
   // dispatches a payload for the server trust domain and nodeAttestorPlugin as a ServerInfoType and has a return type of void
@@ -46,6 +47,7 @@ type ClusterCreateProp = {
   globalErrorMessage: string,
   // tornjak server info of the selected server
   globalTornjakServerInfo: TornjakServerInfo,
+  globalEnvArguments: DynamicConfig,
 }
 
 type ClusterCreateState = {
@@ -419,6 +421,7 @@ const mapStateToProps = (state: RootState) => ({
   globalErrorMessage: state.tornjak.globalErrorMessage,
   globalWorkloadSelectorInfo: state.servers.globalWorkloadSelectorInfo,
   globalAgentsWorkLoadAttestorInfo: state.agents.globalAgentsWorkLoadAttestorInfo,
+  globalEnvArguments: state.tornjak.globalEnvArguments
 })
 
 export default connect(

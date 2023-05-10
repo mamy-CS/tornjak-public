@@ -40,7 +40,9 @@ import {
     GLOBAL_SPIRE_HEALTH_CHECK,
     SpireHealthCheckAction,
     GLOBAL_SPIRE_HEALTH_CHECKING,
-    SpireHealthCheckingAction
+    SpireHealthCheckingAction,
+    EnvArgumentsUpdateAction,
+    GLOBAL_ENV_ARGUMENTS
 } from './types';
 
 import {
@@ -53,6 +55,21 @@ import {
     TornjakServerInfo,
     WorkloadSelectorInfoLabels
 } from 'components/types';
+
+import {
+    DynamicConfig,
+} from 'configuration/config'
+
+// Expected input - spire server health check loading
+// envArgumentsUpdateFunc returns the loading state
+export function envArgumentsUpdateFunc(globalEnvArguments: DynamicConfig): ThunkAction<void, RootState, undefined, EnvArgumentsUpdateAction> {
+    return dispatch => {
+        dispatch({
+            type: GLOBAL_ENV_ARGUMENTS,
+            payload: globalEnvArguments
+        });
+    }
+}
 
 // Expected input - spire server health check loading
 // spireHealthCheckingFunc returns the loading state

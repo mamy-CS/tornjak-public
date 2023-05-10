@@ -10,7 +10,7 @@ import {
   tornjakMessageFunc,
 } from 'redux/actions';
 import { RootState } from 'redux/reducers';
-
+import { DynamicConfig } from "../configuration/config";
 import {
   TornjakServerInfo as TornjakServInfo,
 } from './types';
@@ -35,6 +35,7 @@ type TornjakServerInfoProp = {
   globalTornjakServerInfo: TornjakServInfo,
   // error/ success messege returned for a specific function
   globalErrorMessage: string,
+  globalEnvArguments: DynamicConfig,
 }
 
 type TornjakServerInfoState = {}
@@ -124,6 +125,7 @@ const mapStateToProps = (state: RootState) => ({
   globalServerInfo: state.servers.globalServerInfo,
   globalTornjakServerInfo: state.servers.globalTornjakServerInfo,
   globalErrorMessage: state.tornjak.globalErrorMessage,
+  globalEnvArguments: state.tornjak.globalEnvArguments
 })
 
 export default connect(

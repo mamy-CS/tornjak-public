@@ -22,6 +22,7 @@ import {
   ServerInfo,
   TornjakServerInfo
 } from './types'
+import { DynamicConfig } from "../configuration/config";
 // import PropTypes from "prop-types"; // needed for testing will be removed on last pr
 
 type ClusterManagementProp = {
@@ -45,6 +46,7 @@ type ClusterManagementProp = {
   globalClusterTypeInfo: string[],
   // list of available agents as array of AgentsListType
   globalAgentsList: AgentsList[],
+  globalEnvArguments: DynamicConfig,
 }
 
 type ClusterManagementState = {
@@ -181,6 +183,7 @@ const mapStateToProps = (state: RootState) => ({
   globalServerInfo: state.servers.globalServerInfo,
   globalTornjakServerInfo: state.servers.globalTornjakServerInfo,
   globalErrorMessage: state.tornjak.globalErrorMessage,
+  globalEnvArguments: state.tornjak.globalEnvArguments
 })
 
 export default connect(

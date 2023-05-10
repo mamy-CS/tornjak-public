@@ -9,6 +9,7 @@ import {
 } from 'redux/actions';
 import { RootState } from 'redux/reducers';
 import { AgentsList, AgentsWorkLoadAttestorInfo } from "./types";
+import { DynamicConfig } from "../configuration/config";
 // import PropTypes from "prop-types";
 
 type WorkLoadAttestorProp = {
@@ -24,6 +25,7 @@ type WorkLoadAttestorProp = {
     // the list of available workload selectors and their options
     globalWorkloadSelectorInfo: { [index: string]: { label: string }[] },
     agentData: { cells: DataTableCell[] },
+    globalEnvArguments: DynamicConfig,
 }
 
 type WorkLoadAttestorState = {
@@ -177,6 +179,7 @@ const mapStateToProps = (state: RootState) => ({
     globalServerSelected: state.servers.globalServerSelected,
     globalAgentsList: state.agents.globalAgentsList,
     globalWorkloadSelectorInfo: state.servers.globalWorkloadSelectorInfo,
+    globalEnvArguments: state.tornjak.globalEnvArguments
 })
 
 export default connect(

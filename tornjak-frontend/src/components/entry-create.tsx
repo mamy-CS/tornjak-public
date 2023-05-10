@@ -35,6 +35,7 @@ import { RootState } from 'redux/reducers';
 import EntryExpiryFeatures from './entry-expiry-features';
 import CreateEntryJson from './entry-create-json';
 import { displayError, displayResponseError } from './error-api';
+import { DynamicConfig } from "../configuration/config";
 // import PropTypes from "prop-types"; // needed for testing will be removed on last pr
 
 type CreateEntryProp = {
@@ -78,6 +79,7 @@ type CreateEntryProp = {
   globalAgentsWorkLoadAttestorInfo: AgentsWorkLoadAttestorInfo[],
   // the server trust domain and nodeAttestorPlugin as a ServerInfoType
   globalServerInfo: ServerInfo,
+  globalEnvArguments: DynamicConfig,
 }
 
 type CreateEntryState = {
@@ -915,6 +917,7 @@ const mapStateToProps = (state: RootState) => ({
   globalErrorMessage: state.tornjak.globalErrorMessage,
   globalWorkloadSelectorInfo: state.servers.globalWorkloadSelectorInfo,
   globalAgentsWorkLoadAttestorInfo: state.agents.globalAgentsWorkLoadAttestorInfo,
+  globalEnvArguments: state.tornjak.globalEnvArguments
 })
 
 // Note: Needed for UI testing - will be removed after

@@ -1,9 +1,15 @@
+import store from '../redux/store';
 var urljoin = require('url-join');
 
-// API_SERVER_URL
-const ApiServerUri = process.env["REACT_APP_API_SERVER_URI"];
+const state = store.getState();
+let envArguments = state.tornjak.globalEnvArguments;
 
-export default function GetApiServerUri (uri: string): string {
+// API_SERVER_URL
+let ApiServerUri = process.env["REACT_APP_API_SERVER_URI"];
+
+export default function GetApiServerUri(uri: string): string {
+    console.log("envArguments.REACT_APP_API_SERVER_URI", envArguments.REACT_APP_API_SERVER_URI)
+    ApiServerUri = envArguments.REACT_APP_API_SERVER_URI;
     return urljoin(ApiServerUri ? ApiServerUri : "/", uri)
 }
 

@@ -13,6 +13,7 @@ import { RootState } from 'redux/reducers';
 import {
   EntriesList, TornjakServerInfo
 } from './types'
+import { DynamicConfig } from "../configuration/config";
 
 type EntryListProp = {
   // dispatches a payload for the server selected and has a return type of void
@@ -29,6 +30,7 @@ type EntryListProp = {
   globalEntriesList: EntriesList[],
   // tornjak server info of the selected server
   globalTornjakServerInfo: TornjakServerInfo,
+  globalEnvArguments: DynamicConfig,
 }
 
 type EntryListState = {}
@@ -108,6 +110,7 @@ const mapStateToProps = (state: RootState) => ({
   globalEntriesList: state.entries.globalEntriesList,
   globalErrorMessage: state.tornjak.globalErrorMessage,
   globalTornjakServerInfo: state.servers.globalTornjakServerInfo,
+  globalEnvArguments: state.tornjak.globalEnvArguments
 })
 
 // Note: Needed for UI testing - will be removed after

@@ -25,6 +25,7 @@ import {
   WorkloadSelectorInfoLabels,
 } from './types';
 //import PropTypes from "prop-types"; // needed for testing will be removed on last pr
+import { DynamicConfig } from "../configuration/config";
 
 type AgentListProp = {
   // dispatches a payload for list of available cluster types as array of strings and has a return type of void
@@ -51,6 +52,7 @@ type AgentListProp = {
   globalTornjakServerInfo: TornjakServerInfo,  
   // list of available agents as array of AgentsListType
   globalAgentsList: AgentsList[], 
+  globalEnvArguments: DynamicConfig,
 }
 
 type AgentListState = {
@@ -107,6 +109,7 @@ class AgentList extends Component<AgentListProp, AgentListState> {
       if (prevProps.globalTornjakServerInfo !== this.props.globalTornjakServerInfo) {
         this.TornjakApi.populateServerInfo(this.props.globalTornjakServerInfo, this.props.serverInfoUpdateFunc);
         this.TornjakApi.refreshLocalSelectorsState(this.props.agentworkloadSelectorInfoFunc);
+        this.TornjakApi.populateLocalAgentsUpdate(this.props.agentsListUpdateFunc, this.props.tornjakMessageFunc);
       }
     }
   }
@@ -146,6 +149,7 @@ const mapStateToProps = (state: RootState) => ({
   globalAgentsList: state.agents.globalAgentsList,
   globalTornjakServerInfo: state.servers.globalTornjakServerInfo,
   globalErrorMessage: state.tornjak.globalErrorMessage,
+  globalEnvArguments: state.tornjak.globalEnvArguments
 })
 
 // Note: Needed for UI testing - will be removed after

@@ -17,6 +17,7 @@ import {
 import { RootState } from 'redux/reducers';
 import { AgentsList, ServerInfo, TornjakServerInfo } from './types';
 import { displayResponseError } from './error-api';
+import { DynamicConfig } from "../configuration/config";
 
 type SelectServerProp = {
     // dispatches a payload for the list of available servers and their basic info as array of strings and has a return type of void
@@ -39,6 +40,7 @@ type SelectServerProp = {
     globalServersList: Array<string>,
     // error/ success messege returned for a specific function
     globalErrorMessage: string,
+    globalEnvArguments: DynamicConfig,
 }
 
 type SelectServerState = {}
@@ -153,6 +155,7 @@ const mapStateToProps = (state: RootState) => ({
     globalServersList: state.servers.globalServersList,
     globalTornjakServerInfo: state.servers.globalTornjakServerInfo,
     globalErrorMessage: state.tornjak.globalErrorMessage,
+    globalEnvArguments: state.tornjak.globalEnvArguments
 })
 
 export default connect(

@@ -24,6 +24,7 @@ import {
 } from './types';
 import { RootState } from 'redux/reducers';
 import { displayError } from './error-api';
+import { DynamicConfig } from "../configuration/config";
 
 type CreateEntryJsonProp = {
     // dispatches a payload for list of new entries uploaded with their metadata info as an array of EntriesListType and has a return type of void
@@ -34,6 +35,7 @@ type CreateEntryJsonProp = {
     globalAgentsList: AgentsList[],
     // list of available parent ids
     ParentIdList: string[],
+    globalEnvArguments: DynamicConfig,
 }
 
 type CreateEntryJsonState = {
@@ -61,7 +63,7 @@ type CreateEntryJsonState = {
     entrySelected: boolean,
     spiffeIdPrefix: string,
     newEntriesLoaded: boolean,
-    newFileUploaded: boolean,
+    newFileUploaded: boolean
 }
 
 const NewEntryJsonFormatLink = (props: { link: link }) => (
@@ -874,6 +876,7 @@ class CreateEntryJson extends Component<CreateEntryJsonProp, CreateEntryJsonStat
 const mapStateToProps = (state: RootState) => ({
     globalNewEntries: state.entries.globalNewEntries,
     globalAgentsList: state.agents.globalAgentsList,
+    globalEnvArguments: state.tornjak.globalEnvArguments
 })
 
 export default connect(

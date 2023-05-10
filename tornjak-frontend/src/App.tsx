@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import "bootstrap/dist/css/bootstrap.min.css";
 import store from 'redux/store';
 import IsManager from './components/is_manager';
@@ -20,18 +20,38 @@ import RenderOnAdminRole from 'components/RenderOnAdminRole'
 import './App.css';
 import 'react-toastify/dist/ReactToastify.css';
 import SpireHealthCheck from 'components/spire-health-check';
+import { ArgumentService } from "./configuration/ArgumentService";
+//import { fetchData } from './components/helpers';
+//console.log("service method performing an action with the following config: ", globalConfig.config);
 
 // to enable SPIRE health check component
-const spireHealthCheck = (process.env.REACT_APP_SPIRE_HEALTH_CHECK_ENABLE === 'true') ?? false; // defualt value false
-
+//const spireHealthCheck = (process.env.REACT_APP_SPIRE_HEALTH_CHECK_ENABLE === 'true') ?? false; // defualt value false
+let spireHealthCheck = false;
 function App() {
+    //fetchData();
+    const [envArguments, setData] = useState<any>(null);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const response = await ArgumentService.getSomeDataFromApi();
+            setData(response);
+        };
+        fetchData();
+    }, []);
+    console.log("data", envArguments)
+    // to enable SPIRE health check component
+    if(envArguments !== null) {
+        spireHealthCheck = (envArguments.REACT_APP_SPIRE_HEALTH_CHECK_ENABLE === true) ?? false;
+    }
     return (
         <div>
             <Provider store={store}>
                 <Router>
                     <div>
                         <div className="nav-comp">
-                            <NavigationBar />
+                            <NavigationBar 
+                                envArguments={envArguments}
+                            />
                         </div>
                         {spireHealthCheck &&
                             <div className="health-check">

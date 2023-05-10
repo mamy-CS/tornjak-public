@@ -8,12 +8,15 @@ import {
   entryExpiryUpdateFunc
 } from 'redux/actions';
 import { RootState } from 'redux/reducers';
+import { DynamicConfig } from "../configuration/config";
+
 var moment = require('moment');
 const JSMaxSafeTime = 8640000000000 // In seconds - JS cannot represent times safely larger than this
 
 type EntryExpiryProp = {
   // dispatches a payload for the entry expiry time and has a return type of void
   entryExpiryUpdateFunc: (globalEntryExpiryTime: number) => void,
+  globalEnvArguments: DynamicConfig,
 }
 
 type EntryExpiryState = {
@@ -221,6 +224,7 @@ class EntryExpiryFeatures extends Component<EntryExpiryProp, EntryExpiryState> {
 
 
 const mapStateToProps = (state: RootState) => ({
+  globalEnvArguments: state.tornjak.globalEnvArguments
 })
 
 export default connect(

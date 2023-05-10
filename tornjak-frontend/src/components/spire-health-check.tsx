@@ -8,6 +8,7 @@ import {
   spireHealthCheckFunc,
   spireHealthCheckingFunc
 } from 'redux/actions';
+import { DynamicConfig } from "../configuration/config";
 
 const spireHealthCheckTime: number = parseInt(process.env.REACT_APP_SPIRE_HEALTH_CHECK_FREQ_SEC ?? '120', 10); // in secods: defualt value of 2 minutes
 
@@ -20,6 +21,7 @@ type SpireHealthCheckProp = {
   spireHealthCheckingFunc: (globalSpireHealthCheck: boolean) => void,
   // the loading state of SPIRE health
   globalSpireHealthChecking: boolean,
+  globalEnvArguments: DynamicConfig,
 }
 
 type SpireHealthCheckState = {
@@ -86,6 +88,7 @@ class SpireHealthCheck extends Component<SpireHealthCheckProp, SpireHealthCheckS
 const mapStateToProps = (state: RootState) => ({
   globalSpireHealthCheck: state.servers.globalSpireHealthCheck,
   globalSpireHealthChecking: state.servers.globalSpireHealthChecking,
+  globalEnvArguments: state.tornjak.globalEnvArguments
 })
 
 export default connect(
